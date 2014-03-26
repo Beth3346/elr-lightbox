@@ -2,84 +2,84 @@
 # Displays a lightbox with an image slideshow built with images from a 
 # thumbnail set
 ###############################################################################
+"use strict"
 
 ( ($) ->
+    class window.DrmLightbox
+        constructor: (@images = $('ul.drm-lightbox-thumbnails'), @speed = 300) ->
+            self = @
+            self.body = $ 'body'
+            thumbnails = self.createThumbnails()
 
-	drmLightbox = {
-		images: $ '.drm-lightbox-thumbnails'
-		body: $ 'body'
+            self.body.on 'click', 'div.drm-blackout img.img-visible', (e) ->
+                e.stopPropagation()
+            self.images.on 'click', 'a', -> self.createLightbox.call @, thumbnails
+            self.body.on 'click', 'div.drm-blackout button.close', self.removeLightbox
+            self.body.on 'click', 'div.drm-blackout ul.thumbnail-list a', self.changeImage
+            self.body.on 'click', 'div.drm-blackout', self.removeLightbox
 
-		config: {
-			speed: 300
-		}
+        createThumbnails: ->
+            links = @images.find 'a'
+            thumbnailList = []          
+            thumbnails = ''
 
-		init: (config) ->
-			$.extend @.config, config
+            # populate imgList array
+            links.each ->
+                thumbnailList.push $(@).attr 'href'
 
-			@.body.on 'click', '.drm-blackout .img-visible', (e) ->
-			    e.stopPropagation()
+            # create html for thumbnail-list
+            $.each thumbnailList, (index, value) ->
+                thumbnails += "<li><a href='#{value}'><img src='#{value}' /></a></li>"
 
-			@.images.on 'click', 'a', @.addLightbox	
+            thumbnails
 
-			@.body.on 'click', '.drm-blackout .close', @.removeLightbox
+        createLightbox: (thumbnails) ->
+            img = $(@).attr 'href'
+            # html for the actual lightbox
+            
+            imgVisible = $ '<img></img>',
+                class: 'img-visible'
+                src: img
+                alt: 'thumbnail'
 
-			@.body.on 'click', '.drm-blackout .thumbnail-list a', @.changeImage			
+            close = $ '<button></button>',
+                class: 'close'
+                text: 'x'
 
-			@.body.on 'click', '.drm-blackout', @.removeLightbox
+            thumbnailHtml = $ '<ul></ul>',
+                class: 'thumbnail-list'
+                html: thumbnails
 
-		createThumbnails: ->
-			links = @.images.find 'a'
-			thumbnailList = []			
-			thumbnails = ''
+            lightboxHtml = $ '<div></div>',
+                class: 'drm-blackout'
 
-			# populate imgList array
-			links.each ->
-				thumbnailList.push $(@).attr 'href'
+            lightboxHtml.hide().appendTo('body').fadeIn 300, ->
+                close.appendTo lightboxHtml
+                imgVisible.appendTo lightboxHtml
+                thumbnailHtml.appendTo lightboxHtml
 
-			# create html for thumbnail-list
-			$.each thumbnailList, (index, value) ->
-				thumbnails += "<li><a href='#{value}'><img src='#{value}' /></a><li>"
+            return false
 
-			return thumbnails
+        changeImage: (e) ->
+            img = $(@).attr 'href'
+            oldImg = $ 'div.drm-blackout img.img-visible'
+            oldImgSrc = oldImg.attr 'src'
+            speed = @speed
 
-		createLightbox: ->
-			img = $(@).attr 'href'
-			thumbnails = drmLightbox.createThumbnails()
+            e.preventDefault()
 
-			# html for the actual lightbox
-			lightboxHtml = "<div class='drm-blackout'><button class='close'>x</button><img src='#{img}' alt='thumbnail' class='img-visible'><ul class='thumbnail-list'>#{thumbnails}</div>"
+            if oldImgSrc isnt img             
+                oldImg.fadeOut speed, ->
+                    $(@).attr('src', img).fadeIn speed
 
-			return lightboxHtml
+            e.stopPropagation() 
 
-		addLightbox: (e) ->
-			lightbox = $ '.drm-blackout'
-			lightboxHtml = drmLightbox.createLightbox.call $ @
+        removeLightbox: (e) ->
+            $('div.drm-blackout').fadeOut @speed, ->
+                $(@).remove()
 
-			# if the lightbox isn't already showing, append it to body and fade it into view
-			if lightbox.length == 0
-				$(lightboxHtml).hide().appendTo(drmLightbox.body).fadeIn drmLightbox.config.speed
+            e.preventDefault()
 
-			e.preventDefault()
-
-		changeImage: (e) ->
-			img = $(@).attr 'href'
-			oldImg = $ '.drm-blackout .img-visible'
-			oldImgSrc = oldImg.attr 'src'
-			speed = drmLightbox.config.speed
-
-			e.preventDefault()
-
-			if oldImgSrc != img				
-				oldImg.fadeOut speed, ->
-					$(@).attr('src', img).fadeIn speed
-
-			e.stopPropagation()	
-
-		removeLightbox: ->
-			$('.drm-blackout').fadeOut drmLightbox.config.speed, ->
-				$(@).remove()
-	}
-
-	drmLightbox.init()
+    new DrmLightbox()
 
 ) jQuery
