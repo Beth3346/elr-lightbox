@@ -58,7 +58,7 @@
                 imgVisible.appendTo lightboxHtml
                 thumbnailHtml.appendTo lightboxHtml
 
-            return false
+            false
 
         changeImage: (e) ->
             img = $(@).attr 'href'
@@ -72,7 +72,7 @@
                 oldImg.fadeOut speed, ->
                     $(@).attr('src', img).fadeIn speed
 
-            e.stopPropagation() 
+            e.stopPropagation()
 
         removeLightbox: (e) ->
             $('div.drm-blackout').fadeOut @speed, ->
