@@ -4,6 +4,7 @@
 ###############################################################################
 "use strict"
 
+$ = jQuery
 class @DrmLightbox
     constructor: (@images = $('ul.drm-lightbox-thumbnails'), @speed = 300) ->
         self = @
@@ -18,12 +19,12 @@ class @DrmLightbox
         self.body.on 'click', 'div.drm-blackout', self.removeLightbox
 
     createThumbnails: ->
-        links = @images.find 'a'
+        _links = @images.find 'a'
         thumbnailList = []          
         thumbnails = ''
 
         # populate imgList array
-        links.each ->
+        _links.each ->
             thumbnailList.push $(@).attr 'href'
 
         # create html for thumbnail-list
@@ -33,12 +34,12 @@ class @DrmLightbox
         thumbnails
 
     createLightbox: (thumbnails) ->
-        img = $(@).attr 'href'
+        _img = $(@).attr 'href'
         # html for the actual lightbox
         
         imgVisible = $ '<img></img>',
             class: 'img-visible'
-            src: img
+            src: _img
             alt: 'thumbnail'
 
         close = $ '<button></button>',
@@ -61,14 +62,14 @@ class @DrmLightbox
 
     changeImage: (e) ->
         img = $(@).attr 'href'
-        oldImg = $ 'div.drm-blackout img.img-visible'
-        oldImgSrc = oldImg.attr 'src'
+        _oldImg = $ 'div.drm-blackout img.img-visible'
+        _oldImgSrc = _oldImg.attr 'src'
         speed = @speed
 
         e.preventDefault()
 
-        if oldImgSrc isnt img             
-            oldImg.fadeOut speed, ->
+        if _oldImgSrc isnt img             
+            _oldImg.fadeOut speed, ->
                 $(@).attr('src', img).fadeIn speed
 
         e.stopPropagation()
