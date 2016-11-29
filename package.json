@@ -1,7 +1,7 @@
 {
   "name": "elr-lightbox",
   "version": "1.0.1",
-  "description": "a basic content lightbox",
+  "description": "image lightbox with slideshow",
   "main": "dist/elr-lightbox.js",
   "repository": {
     "type": "git",
