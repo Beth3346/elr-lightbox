@@ -1,7 +1,7 @@
-import elrUtlities from 'elr-utility-lib';
+import elrUI from 'elr-ui';
 const $ = require('jquery');
 
-let elr = elrUtlities();
+let ui = elrUI();
 
 const elrLightbox = function({
     $images = $('ul.elr-lightbox-thumbnails'),
@@ -27,28 +27,28 @@ const elrLightbox = function({
         createLightbox(thumbnails, speed) {
             const img = $(this).attr('href');
 
-            const $imgVisible = elr.createElement('img', {
+            const $imgVisible = ui.createElement('img', {
                 class: 'img-visible',
                 src: img,
                 alt: 'thumbnail'
             });
 
-            const $close = elr.createElement('button', {
+            const $close = ui.createElement('button', {
                 class: 'close',
                 text: 'x'
             });
 
-            const $thumbnails = elr.createElement('ul', {
+            const $thumbnails = ui.createElement('ul', {
                 class: 'thumbnail-list',
                 html: thumbnails
             });
 
-            const $nav = elr.createElement('div', {
+            const $nav = ui.createElement('div', {
                 class: 'lightbox-nav',
                 html: `<button class="prev" data-dir="prev"><i class="fa fa-caret-left"></i></button><button class="next" data-dir="next"><i class="fa fa-caret-right"></i></button>`
             });
 
-            const $lightbox = elr.createElement('div', {
+            const $lightbox = ui.createElement('div', {
                 class: 'elr-blackout'
             });
 
@@ -122,8 +122,8 @@ const elrLightbox = function({
             self.changeImage.call(this, speed);
         });
 
-        elr.killEvent($body, 'click', 'div.elr-blackout .img-visible');
-        elr.killEvent($body, 'click', 'div.elr-blackout .lightbox-nav button');
+        ui.killEvent($body, 'click', 'div.elr-blackout .img-visible');
+        ui.killEvent($body, 'click', 'div.elr-blackout .lightbox-nav button');
 
         $body.on('click', 'div.elr-blackout .lightbox-nav button', function(e) {
             e.preventDefault();
