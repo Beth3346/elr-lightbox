@@ -23,7 +23,6 @@ const elrLightbox = function({
 
             return thumbnails;
         },
-
         createLightbox(thumbnails, speed) {
             const img = $(this).attr('href');
 
@@ -59,7 +58,6 @@ const elrLightbox = function({
                 $thumbnails.appendTo($lightbox);
             });
         },
-
         getNextImageIndex(direction, $list, $currentImg) {
             const currentImgSrc = $currentImg.attr('src');
             const $currentThumb = $list.find(`img[src$="${currentImgSrc}"]`).closest('li').index();
@@ -71,18 +69,20 @@ const elrLightbox = function({
 
             return ($currentThumb === len) ? 0 : $currentThumb + 1;
         },
-
-        advanceImage(direction, speed) {
+        getNextImage(direction) {
             const $list = $('.thumbnail-list');
             const $currentImg = $('div.elr-blackout img.img-visible');
-            const $nextImg = $list.find('li').eq(this.getNextImageIndex(direction, $list, $currentImg)).find('img').attr('src');
+
+            return $list.find('li').eq(this.getNextImageIndex(direction, $list, $currentImg)).find('img').attr('src');
+        },
+        advanceImage(direction, speed) {
+            const $nextImg = this.getNextImage(direction);
 
             $currentImg.fadeOut(speed, function() {
                 $(this).attr('src', $nextImg).fadeIn(speed);
             });
         },
-
-        changeImage(speed) {
+        swapImage(speed) {
             const img = $(this).attr('href');
             const $oldImg = $('div.elr-blackout img.img-visible');
             const oldImgSrc = $oldImg.attr('src');
@@ -93,7 +93,6 @@ const elrLightbox = function({
                 });
             }
         },
-
         removeLightbox(speed) {
             $('div.elr-blackout').fadeOut(speed, function() {
                 $(this).remove();
@@ -119,7 +118,7 @@ const elrLightbox = function({
         $body.on('click', 'div.elr-blackout ul.thumbnail-list a', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            self.changeImage.call(this, speed);
+            self.swapImage.call(this, speed);
         });
 
         ui.killEvent($body, 'click', 'div.elr-blackout .img-visible');
