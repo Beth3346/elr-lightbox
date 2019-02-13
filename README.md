@@ -1,6 +1,6 @@
 # elr-lightbox
 
-[![Build Status](https://travis-ci.org/Beth3346/elr-lightbox.svg?branch=master)](https://travis-ci.org/Beth3346/elr-lightbox)
+[![Build Status](https://travis-ci.org/Beth3346/elr-lightbox.svg?branch=master)](https://travis-ci.org/Beth3346/elr-lightbox) [![Greenkeeper badge](https://badges.greenkeeper.io/Beth3346/elr-lightbox.svg)](https://greenkeeper.io/)
 
 image lightbox with slideshow
 
